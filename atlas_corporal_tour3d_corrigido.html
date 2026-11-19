@@ -1,89 +1,71 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Atlas Corporal — Tour 3D</title>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#e9eee3"><title>Atlas Corporal | Tour 3D</title>
 <style>
-*{box-sizing:border-box}body{margin:0;background:#e9e7e1;font-family:system-ui,-apple-system,Segoe UI,sans-serif;color:#28352a}
-#app{height:100vh;display:flex;flex-direction:column}
-header{padding:14px 18px;background:#c5ceb9;display:flex;justify-content:space-between;align-items:center;gap:12px}
-h1{font-size:18px;margin:0;letter-spacing:.04em}header small{font-size:12px;color:#53614e}
-#view{flex:1;min-height:0;position:relative}
-#view canvas{display:block;width:100%;height:100%}
-.panel{position:absolute;left:12px;top:12px;background:#f5f2e9e8;padding:12px;border-radius:14px;max-width:210px;box-shadow:0 5px 20px #0001}
-.panel strong{font-size:13px}.panel p{font-size:12px;margin:6px 0;color:#566052}
-button{border:0;background:#52664c;color:#fff;border-radius:10px;padding:9px 11px;margin:3px;cursor:pointer;font-size:12px}
-button:hover{background:#3d5038}.bottom{padding:8px;background:#f1eee7;text-align:center;font-size:12px;color:#53614e}
-</style>
-</head>
-<body>
-<div id="app">
-<header><div><h1>ATLAS CORPORAL</h1><small>Clínica de estética corporal · Tour 3D interativo</small></div><div><button onclick="resetView()">Vista inicial</button><button onclick="toggleLabels()">Ambientes</button></div></header>
-<div id="view"><div class="panel"><strong id="roomTitle">Explore a clínica</strong><p id="roomText">Arraste para girar · pinça/scroll para aproximar · toque em um ambiente para selecionar.</p></div></div>
-<div class="bottom">Modelo 3D de estudo — layout conceitual baseado na planta original; dimensões e detalhes construtivos ainda não estão em escala técnica.</div>
-</div>
-<script type="importmap">
-{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js"}}
-</script>
+:root{--olive:#aab59a;--deep:#68765d;--wood:#b38b64;--cream:#f0eee6;--gray:#d7d9d4;--ink:#403d36;--gold:#c7b58a}
+*{box-sizing:border-box}body{margin:0;background:var(--cream);color:var(--ink);font-family:Georgia,serif}.top{padding:15px 20px;border-bottom:1px solid #d4c8a7;background:#f7f5ed;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.brand{font-size:clamp(20px,4vw,32px);letter-spacing:.12em;color:var(--deep)}.brand small{display:block;font:11px Arial,sans-serif;letter-spacing:.2em;margin-top:4px;color:#756f61}.actions{display:flex;gap:7px;flex-wrap:wrap}.btn{border:1px solid var(--gold);border-radius:30px;background:transparent;color:#625846;padding:9px 14px;font-size:13px;cursor:pointer}.btn.active,.btn:hover{background:var(--deep);color:white;border-color:var(--deep)}main{max-width:1400px;margin:auto;padding:14px}.stage{position:relative;height:min(76vh,800px);min-height:420px;border:1px solid #d1c4a1;border-radius:18px;overflow:hidden;background:linear-gradient(#edf0e8,#dcded6);box-shadow:0 12px 28px #5b4d3020}canvas{display:block;width:100%;height:100%;touch-action:none}.hint{position:absolute;left:12px;top:12px;background:#f7f5ede8;border:1px solid #d1c4a1;border-radius:12px;padding:9px 12px;font:12px Arial,sans-serif;max-width:calc(100% - 24px)}.controls{position:absolute;right:14px;bottom:14px;display:flex;align-items:end;gap:12px}.pad{display:grid;grid-template-columns:44px 44px 44px;grid-template-rows:44px 44px;gap:5px}.pad button,.lookpad button{border:1px solid #c7b58b;background:#f7f5ede8;color:#51483d;border-radius:12px;font-size:18px;touch-action:none;user-select:none}.pad button:nth-child(1){grid-column:2}.pad button:nth-child(2){grid-column:1;grid-row:2}.pad button:nth-child(3){grid-column:2;grid-row:2}.pad button:nth-child(4){grid-column:3;grid-row:2}.lookpad{display:grid;grid-template-columns:42px 42px;grid-template-rows:42px 42px;gap:5px}.panel{margin-top:18px}.panel h2{font-weight:400;color:var(--deep);font-size:23px;margin:0 0 10px}.rooms{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:8px}.room{background:#f7f5ed;border:1px solid #d1c4a1;border-radius:12px;padding:12px;text-align:left;cursor:pointer;color:var(--ink);font:14px Arial,sans-serif;transition:.2s}.room:hover{background:#e8ebe2;transform:translateY(-2px)}.room b{display:block;font-weight:600;margin-bottom:4px}.room span{color:#827363;font-size:12px}.foot{font:12px Arial,sans-serif;color:#796b5b;text-align:center;padding:18px}.welcome{position:absolute;inset:0;z-index:4;background:linear-gradient(110deg,#44513feF,#899783e5);display:flex;align-items:center;justify-content:center;text-align:center;padding:24px;color:#f7f5ed}.welcome-card{max-width:560px}.welcome .mark{font-size:12px;letter-spacing:.35em;color:#e2d6b8}.welcome h1{font-size:clamp(32px,7vw,58px);font-weight:normal;letter-spacing:.12em;margin:12px 0}.welcome p{font:15px/1.6 Arial,sans-serif;color:#e9e8df}.start{margin-top:18px;border:1px solid #d7c59c;background:#d7c59c;color:#344133;padding:13px 24px;border-radius:28px;font:600 14px Arial,sans-serif;cursor:pointer}.smallnote{font:11px Arial;color:#d6d5ca;margin-top:13px}.hidden{display:none!important}
+@media(max-width:600px){.top{align-items:flex-start}.actions{width:100%}.btn{flex:1;padding:9px 8px}.stage{height:66vh;min-height:370px}main{padding:9px}.hint{font-size:11px}.controls{right:9px;bottom:9px;gap:8px}.pad{grid-template-columns:38px 38px 38px;grid-template-rows:38px 38px}.lookpad{grid-template-columns:36px 36px;grid-template-rows:36px 36px}.welcome h1{letter-spacing:.08em}}
+</style></head><body>
+<header class="top"><div class="brand">ATLAS CORPORAL<small>CLÍNICA DE ESTÉTICA · TOUR VIRTUAL</small></div><nav class="actions"><button class="btn active" id="walk">Caminhar</button><button class="btn" id="aerial">Vista aérea</button><button class="btn" id="catalog">Ambientes</button><button class="btn" id="ceiling">Mostrar teto</button></nav></header>
+<main><section class="stage" id="stage"><div class="hint" id="hint">Arraste para olhar ao redor · Use os controles para caminhar</div><div class="controls"><div class="lookpad" aria-label="Olhar"><button data-look="left">↶</button><button data-look="up">↑</button><button data-look="down">↓</button><button data-look="right">↷</button></div><div class="pad" aria-label="Movimento"><button data-key="w">↑</button><button data-key="a">←</button><button data-key="s">↓</button><button data-key="d">→</button></div></div><div class="welcome" id="welcome"><div class="welcome-card"><div class="mark">BEM-VINDA À</div><h1>ATLAS CORPORAL</h1><p>Uma clínica pensada para acolher, cuidar e valorizar o bem-estar.<br>Explore nossos ambientes em uma visita virtual.</p><button class="start" id="start">ENTRAR NA CLÍNICA</button><div class="smallnote">Tour 3D demonstrativo · Arraste para olhar · Use os controles para se movimentar</div></div></div></section><section class="panel" id="panel"><h2>Explore os ambientes</h2><div class="rooms" id="rooms"></div></section></main><footer class="foot">Projeto demonstrativo de visita virtual · Atlas Corporal</footer>
 <script type="module">
 import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
-import {OrbitControls} from 'https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/controls/OrbitControls.js';
-const host=document.getElementById('view');
-const scene=new THREE.Scene();scene.background=new THREE.Color('#e9e7e1');
-const camera=new THREE.PerspectiveCamera(42,host.clientWidth/host.clientHeight,.1,1000);
-camera.position.set(20,24,25);
-const renderer=new THREE.WebGLRenderer({antialias:true});renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.15;host.appendChild(renderer.domElement);
-const controls=new OrbitControls(camera,renderer.domElement);controls.target.set(0,0,0);controls.enableDamping=true;controls.maxPolarAngle=Math.PI/2.05;controls.minDistance=10;controls.maxDistance=55;
-scene.add(new THREE.HemisphereLight(0xfff6e6,0x88917b,2));
-const key=new THREE.DirectionalLight(0xfff0dc,2.2);key.position.set(-10,22,15);key.castShadow=true;key.shadow.mapSize.set(2048,2048);scene.add(key);
-const mat=(color,rough=.8)=>new THREE.MeshStandardMaterial({color,roughness:rough});
-const sage=mat('#c5ceb9'),darkSage=mat('#8f9d82'),wood=mat('#d1b695'),cream=mat('#e9e7e1'),floor=mat('#d7d0c4'),white=mat('#f3efe6'),metal=mat('#a8aaa5',.35),glass=new THREE.MeshStandardMaterial({color:'#d9e7e0',transparent:true,opacity:.42});
-const floorBase=new THREE.Mesh(new THREE.BoxGeometry(18,.18,13),floor);floorBase.position.y=-.1;floorBase.receiveShadow=true;scene.add(floorBase);
-const roomObjects=[];
-function box(parent,x,y,z,w,h,d,m,shadow=true){let o=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),m);o.position.set(x,y+h/2,z);o.castShadow=shadow;o.receiveShadow=true;parent.add(o);return o}
-function label(text,x,z){const c=document.createElement('canvas');c.width=512;c.height=128;const ctx=c.getContext('2d');ctx.fillStyle='#52664c';ctx.roundRect(12,12,488,104,28);ctx.fill();ctx.fillStyle='#fff';ctx.font='bold 36px Arial';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(text,256,64);const t=new THREE.CanvasTexture(c);let s=new THREE.Sprite(new THREE.SpriteMaterial({map:t,transparent:true}));s.position.set(x,2.25,z);s.scale.set(3.2,.8,1);scene.add(s);roomObjects.push(s)}
-function partition(x,z,w,d,h=2.3){box(scene,x,h/2,z,w,h,d,sage)}
-function bed(x,z){box(scene,x,0.25,z,.95,.18,1.85,wood);box(scene,x,0.46,z,.86,.16,1.65,white);box(scene,x,0.56,z-.65,.62,.18,.35,cream);box(scene,x-.52,.25,z,.12,.55,.12,metal);box(scene,x+.52,.25,z,.12,.55,.12,metal)}
-function cabinet(x,z,w=1.2){box(scene,x,.05,z,w,.75,.42,wood);box(scene,x,.82,z,w,.08,.46,white)}
-function machine(x,z){box(scene,x,.15,z,.5,.75,.42,white);box(scene,x,.93,z-.03,.42,.25,.06,darkSage);box(scene,x,1.2,z,.36,.08,.32,metal);box(scene,x,.02,z,.12,.12,.12,metal)}
-function treatmentRoom(x,z,name,variant){bed(x-.3,z);cabinet(x+.8,z-1.2);machine(x+1.15,z+.6);box(scene,x+.8,.1,z+1.15,.5,.65,.4,darkSage);label(name,x,z)}
-// 3 treatment rooms left, stacked
-treatmentRoom(-5.2,-3.3,'ATENDIMENTO 1',1);
-treatmentRoom(-5.2,0,'ATENDIMENTO 2',2);
-treatmentRoom(-5.2,3.3,'ATENDIMENTO 3',3);
-// reception / evaluation front
-box(scene,-5.2,.05,-6,.8,.5,.4,wood);box(scene,-5.2,.58,-6,.85,.08,.42,white);
-box(scene,-6.2,.05,-7.2,1.1,.55,.8,cream);box(scene,-4.2,.05,-7.2,1.1,.55,.8,cream);
-label('RECEPÇÃO',-5.3,-5.7);
-box(scene,4.3,.05,-6.2,1.1,.7,.6,wood);box(scene,4.3,.8,-6.2,1.1,.08,.65,white);box(scene,2.8,.05,-5.4,.5,.45,.5,cream);box(scene,5.8,.05,-5.4,.5,.45,.5,cream);label('AVALIAÇÃO',4.2,-4.6);machine(6.4,-6);
-// right-side support rooms
-cabinet(3.8,3.2,1.7);cabinet(6.4,3.2,1.3);label('ARMAZENAMENTO',4.8,4.4);
-box(scene,6.4,.05,1.2,1.2,.5,.5,white);label('DML',6.5,1.8);
-for(let i=0;i<3;i++){box(scene,4.1,.05,-.7-i*2,1.1,.25,.55,white);box(scene,5.3,.05,-.7-i*2,.35,.45,.35,cream);label(['PNE','FEMININO','MASCULINO'][i],6.3,-.2-i*2)}
-// top back support
-cabinet(-7.3,5.5,1.4);label('DESPENSA',-7.1,6.1);
-box(scene,-4.8,.05,5.5,.9,.5,.5,white);label('RESÍDUOS',-4.8,6.1);
-box(scene,-2.3,.05,5.5,.7,.5,.5,white);label('BANH. FUNC.',-2.2,6.1);
-box(scene,4.3,.05,5.5,1.3,.65,.6,wood);box(scene,4.3,.75,5.5,1.4,.08,.65,white);label('COPA',4.3,6.1);
-box(scene,4.5,.05,7.2,1.5,.5,.5,wood);box(scene,5.8,.05,7.2,1.5,.5,.5,wood);
-// walls enclosing and dividing, stylized open front cutaway
-partition(-8.9,0,.18,12.6,2.5);partition(8.9,0,.18,12.6,2.5);partition(0,6.4,17.8,.18,2.5);
-partition(0,-.2,17.8,.18,2.5); // back-ish lower boundary
-// central corridor subtle green floor strip
-box(scene,0,.02,0,3.3,.03,10.7,sage,false);
-// wood accent panel behind reception
-for(let i=0;i<12;i++)box(scene,-7.2+i*.18,.02,-6.5,.06,1.8,.08,wood,false);
-// plants simple foliage and pot
-function plant(x,z){box(scene,x,.02,z,.35,.35,.35,wood,false);for(let i=0;i<6;i++){let leaf=new THREE.Mesh(new THREE.SphereGeometry(.28,12,8),darkSage);leaf.scale.set(.6,1.5,.6);leaf.position.set(x+Math.cos(i)*.35,.65+Math.sin(i%3)*.15,z+Math.sin(i)*.35);scene.add(leaf)}}
-plant(-8,-5.5);plant(-8,2.8);plant(7.7,4.8);plant(7.7,-5.7);plant(0,4.2);
-const ray=new THREE.Raycaster(),mouse=new THREE.Vector2();const clickables=[];
-function clickMesh(mesh,title,desc){mesh.userData.info={title,desc};clickables.push(mesh)}
-clickMesh(floorBase,'Atlas Corporal','Arraste para girar a planta; use zoom para aproximar. Os ambientes estão em uma primeira montagem 3D conceitual.');
-renderer.domElement.addEventListener('pointerdown',e=>{const r=renderer.domElement.getBoundingClientRect();mouse.x=(e.clientX-r.left)/r.width*2-1;mouse.y=-(e.clientY-r.top)/r.height*2+1;ray.setFromCamera(mouse,camera);const hits=ray.intersectObjects(scene.children,true);for(const h of hits){let o=h.object;while(o&&!o.userData.info)o=o.parent;if(o?.userData.info){document.getElementById('roomTitle').textContent=o.userData.info.title;document.getElementById('roomText').textContent=o.userData.info.desc;break}}});
-function resize(){const w=host.clientWidth,h=host.clientHeight;camera.aspect=w/h;camera.updateProjectionMatrix();renderer.setSize(w,h)}
-window.addEventListener('resize',resize);resize();
-window.resetView=()=>{camera.position.set(20,24,25);controls.target.set(0,0,0);controls.update()};
-window.toggleLabels=()=>{roomObjects.forEach(s=>s.visible=!s.visible)};
-function animate(){requestAnimationFrame(animate);controls.update();renderer.render(scene,camera)}animate();
+const stage=document.querySelector('#stage'),hint=document.querySelector('#hint');
+const scene=new THREE.Scene();scene.background=new THREE.Color('#e9eee3');scene.fog=new THREE.Fog('#e9eee3',26,48);
+const camera=new THREE.PerspectiveCamera(68,stage.clientWidth/stage.clientHeight,.1,100);camera.position.set(0,1.65,5.4);
+const renderer=new THREE.WebGLRenderer({antialias:true});renderer.setPixelRatio(Math.min(devicePixelRatio,1.7));renderer.setSize(stage.clientWidth,stage.clientHeight);renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.05;stage.appendChild(renderer.domElement);
+scene.add(new THREE.HemisphereLight('#fffaf0','#909585',2.1));const sun=new THREE.DirectionalLight('#fff2d9',2.1);sun.position.set(-7,12,8);sun.castShadow=true;scene.add(sun);
+const mat=(c,r=.86)=>new THREE.MeshStandardMaterial({color:c,roughness:r});const floorMat=mat('#deded5'),wallMat=mat('#e8e9e1'),olive=mat('#aab59a'),deepOlive=mat('#68765d'),wood=mat('#b38b64'),white=mat('#f7f5ed'),gray=mat('#d2d5cf'),dark=mat('#51483d'),glass=new THREE.MeshStandardMaterial({color:'#b8d2d0',roughness:.22,metalness:.08});
+function box(x,y,z,w,h,d,m,cast=true){const o=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),m);o.position.set(x,y+h/2,z);o.castShadow=cast;o.receiveShadow=true;scene.add(o);return o}
+function wall(x,y,z,w,h,d){return box(x,y,z,w,h,d,wallMat,false)}
+// Clinic footprint: 18m wide x 13m deep; entrance on the front (positive Z).
+box(0,-.16,0,18,.25,13,floorMat,false);
+wall(-9,0,0,.16,3.1,13);wall(9,0,0,.16,3.1,13);wall(0,0,-6.5,18,3.1,.16);
+// Front wall pieces leave a wide entrance in the center.
+wall(-6.4,0,6.5,5.2,3.1,.16);wall(6.4,0,6.5,5.2,3.1,.16);
+// Left wing: three treatment rooms separated by cross-walls with door gaps.
+wall(-3.1,0,-3.0,.14,3,6.8);wall(-6.0,0,-1.0,5.8,3,.14);wall(-6.0,0,1.9,5.8,3,.14);wall(-6.0,0,4.4,5.8,3,.14);
+// Right wing: evaluation, support, rest and bathrooms; main corridor stays open.
+wall(3.2,0,-3.2,.14,3,6.4);wall(6.0,0,-4.9,5.9,3,.14);wall(6.0,0,-2.1,5.9,3,.14);wall(6.0,0,.6,5.9,3,.14);wall(6.0,0,3.5,5.9,3,.14);
+// Furniture primitives
+function cabinet(x,z,w=1.35){box(x,.05,z,w,.82,.42,wood);box(x,.48,z-.03,w*.92,.05,.45,gray,false)}
+function bed(x,z){box(x,.07,z,1.1,.18,2.0,white);box(x,.27,z-.78,1.02,.25,.43,olive);box(x,.18,z+.88,1.02,.16,.25,white);box(x,.03,z-.85,1.12,.1,.18,gray)}
+function plant(x,z){box(x,.03,z,.34,.34,.34,wood);const crown=new THREE.Mesh(new THREE.SphereGeometry(.33,12,9),olive);crown.position.set(x,.7,z);crown.scale.y=1.35;scene.add(crown);for(let i=0;i<4;i++){let leaf=new THREE.Mesh(new THREE.SphereGeometry(.14,8,6),deepOlive);leaf.position.set(x+(i-1.5)*.17,1.05,z+(i%2-.5)*.15);leaf.scale.set(.6,1.5,.55);scene.add(leaf)}}
+function desk(x,z,w=1.9){box(x,.08,z,w,.82,.72,wood);box(x,.94,z-.04,w*.45,.06,.4,white,false)}
+function chair(x,z){box(x,.08,z,.68,.4,.62,gray);box(x,.48,z+.24,.68,.58,.16,gray)}
+function table(x,z){box(x,.08,z,1.65,.74,.72,wood);chair(x-1.0,z);chair(x+1.0,z)}
+// Reception at the entrance, oriented away from the viewer so the lobby reads clearly.
+desk(0,3.55,2.8);plant(-3.8,4.4);plant(3.8,4.4);chair(-1.9,4.3);chair(1.9,4.3);
+// Treatment rooms on the left
+bed(-6.3,-4.1);cabinet(-7.8,-5.3);plant(-4.5,-5.2);
+bed(-6.3,-1.1);cabinet(-7.8,.0);plant(-4.5,.2);
+bed(-6.3,2.5);cabinet(-7.8,3.8);plant(-4.5,4.0);
+// Evaluation and consult room on right
+ desk(6.3,4.6,1.8);chair(5.0,4.0);chair(7.5,4.0);plant(8.0,5.5);
+// Support rooms / kitchenette along the rear-right
+ cabinet(4.1,-5.4,1.8);cabinet(7.2,-5.4,1.7);table(5.8,-3.8);cabinet(7.7,-1.1,1.3);
+// Soft accent panels, glazing and reception feature wall
+ box(0,1.25,-6.38,4.6,1.1,.05,olive,false);box(0,1.35,-6.34,2.4,.45,.05,wood,false);
+for(const x of [-8,-5,4,7.8])box(x,1.25,-6.38,1.1,1.1,.07,glass,false);
+const ceiling=box(0,3.08,0,18,.12,13,mat('#f3f2ec'),false);ceiling.visible=false;
+const roomData=[['Recepção','Balcão, espera e acolhimento',0,4.6],['Sala de avaliação','Consulta e avaliação',6.2,4.6],['Atendimento 1','Sala de procedimentos',-6.3,2.5],['Atendimento 2','Sala de procedimentos',-6.3,-1.1],['Atendimento 3','Sala de procedimentos',-6.3,-4.1],['Copa','Área de descanso',5.8,-3.8],['Armazenamento','Materiais e insumos',4.1,-5.4],['DML','Materiais de limpeza',7.7,-1.1]];
+const roomButtons=document.querySelector('#rooms');roomData.forEach(([name,desc,x,z])=>{let b=document.createElement('button');b.className='room';b.innerHTML=`<b>${name}</b><span>${desc}</span>`;b.onclick=()=>goRoom(x,z);roomButtons.appendChild(b)});
+let mode='walk',yaw=0,pitch=-.08,keys={},drag=false,lastX=0,lastY=0,walkPos=new THREE.Vector3(0,1.65,5.25),touchLook={};
+function look(){camera.rotation.order='YXZ';camera.rotation.y=yaw;camera.rotation.x=pitch}
+function goRoom(x,z){mode='walk';setActive('walk');walkPos.set(x,1.65,z);yaw=0;pitch=-.08;camera.position.copy(walkPos);look();hint.textContent='Você está neste ambiente. Use os controles para caminhar e olhar ao redor.'}
+function setActive(id){document.querySelectorAll('.btn').forEach(b=>b.classList.remove('active'));document.querySelector('#'+id).classList.add('active')}
+document.querySelector('#start').onclick=()=>{document.querySelector('#welcome').classList.add('hidden');mode='walk';camera.position.copy(walkPos);look();hint.textContent='Caminhar: controles na tela ou WASD/setas · Arraste para olhar.'};
+document.querySelector('#walk').onclick=()=>{mode='walk';setActive('walk');camera.position.copy(walkPos);look();hint.textContent='Caminhar: WASD ou setas · Arraste para olhar ao redor.'};
+document.querySelector('#aerial').onclick=()=>{mode='aerial';setActive('aerial');camera.position.set(0,18,16);camera.lookAt(0,0,0);hint.textContent='Vista aérea: arraste para girar e use o zoom do navegador para aproximar.'};
+document.querySelector('#catalog').onclick=()=>document.querySelector('#panel').scrollIntoView({behavior:'smooth'});
+document.querySelector('#ceiling').onclick=()=>{ceiling.visible=!ceiling.visible;document.querySelector('#ceiling').classList.toggle('active',ceiling.visible)};
+renderer.domElement.addEventListener('pointerdown',e=>{drag=true;lastX=e.clientX;lastY=e.clientY;renderer.domElement.setPointerCapture(e.pointerId)});renderer.domElement.addEventListener('pointerup',()=>drag=false);renderer.domElement.addEventListener('pointercancel',()=>drag=false);renderer.domElement.addEventListener('pointermove',e=>{if(!drag)return;let dx=e.clientX-lastX,dy=e.clientY-lastY;lastX=e.clientX;lastY=e.clientY;if(mode==='walk'){yaw-=dx*.0035;pitch=Math.max(-.95,Math.min(.95,pitch-dy*.0025));look()}else{camera.position.applyAxisAngle(new THREE.Vector3(0,1,0),-dx*.004);camera.position.y=Math.max(6,Math.min(25,camera.position.y+dy*.03));camera.lookAt(0,0,0)}});
+renderer.domElement.addEventListener('wheel',e=>{if(mode==='aerial'){camera.position.multiplyScalar(e.deltaY>0?1.06:.94);camera.position.y=Math.max(6,Math.min(25,camera.position.y));camera.lookAt(0,0,0)}});
+window.addEventListener('keydown',e=>keys[e.key.toLowerCase()]=true);window.addEventListener('keyup',e=>keys[e.key.toLowerCase()]=false);
+document.querySelectorAll('.pad button').forEach(b=>{let k=b.dataset.key;b.addEventListener('pointerdown',e=>{e.preventDefault();keys[k]=true});['pointerup','pointercancel','pointerleave'].forEach(ev=>b.addEventListener(ev,()=>keys[k]=false))});
+document.querySelectorAll('.lookpad button').forEach(b=>{let k=b.dataset.look;b.addEventListener('pointerdown',e=>{e.preventDefault();touchLook[k]=true});['pointerup','pointercancel','pointerleave'].forEach(ev=>b.addEventListener(ev,()=>touchLook[k]=false))});
+function animate(){requestAnimationFrame(animate);if(mode==='walk'){let f=(keys.w||keys.arrowup?1:0)-(keys.s||keys.arrowdown?1:0),s=(keys.d||keys.arrowright?1:0)-(keys.a||keys.arrowleft?1:0);if(f||s){let v=new THREE.Vector3(s,0,-f).normalize().applyAxisAngle(new THREE.Vector3(0,1,0),yaw).multiplyScalar(.045);walkPos.add(v);walkPos.x=THREE.MathUtils.clamp(walkPos.x,-8.2,8.2);walkPos.z=THREE.MathUtils.clamp(walkPos.z,-5.8,5.8)}if(touchLook.left)yaw+=.025;if(touchLook.right)yaw-=.025;if(touchLook.up)pitch=Math.max(-.95,pitch-.02);if(touchLook.down)pitch=Math.min(.95,pitch+.02);camera.position.copy(walkPos);look()}renderer.render(scene,camera)}animate();
+new ResizeObserver(()=>{camera.aspect=stage.clientWidth/stage.clientHeight;camera.updateProjectionMatrix();renderer.setSize(stage.clientWidth,stage.clientHeight)}).observe(stage);
 </script></body></html>
