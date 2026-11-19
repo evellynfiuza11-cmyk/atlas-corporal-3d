@@ -1,62 +1,268 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<meta name="theme-color" content="#e9e1d0"><title>Atlas Corporal | Tour 3D</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Atlas Corporal | Tour 3D</title>
 <style>
-:root{--olive:#879078;--deep:#59634f;--wood:#9a7655;--cream:#eee7d8;--ink:#43382f;--gold:#b99a5b}
-*{box-sizing:border-box}body{margin:0;background:var(--cream);color:var(--ink);font-family:Georgia,serif}.top{padding:15px 20px;border-bottom:1px solid #c9b17e;background:#f4eddf;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.brand{font-size:clamp(20px,4vw,32px);letter-spacing:.12em;color:var(--deep)}.brand small{display:block;font:11px Arial,sans-serif;letter-spacing:.2em;margin-top:4px;color:#756657}.actions{display:flex;gap:7px;flex-wrap:wrap}.btn{border:1px solid var(--gold);border-radius:30px;background:transparent;color:#6e5741;padding:9px 14px;font-size:13px;cursor:pointer}.btn.active,.btn:hover{background:var(--deep);color:white;border-color:var(--deep)}main{max-width:1400px;margin:auto;padding:14px}.stage{position:relative;height:min(76vh,800px);min-height:420px;border:1px solid #c9b17e;border-radius:18px;overflow:hidden;background:linear-gradient(#e9e1d0,#d9ceb8);box-shadow:0 12px 28px #5b4d3020}canvas{display:block;width:100%;height:100%;touch-action:none}.hint{position:absolute;left:12px;top:12px;background:#f6f0e5e8;border:1px solid #c7ad77;border-radius:12px;padding:9px 12px;font:12px Arial,sans-serif;max-width:calc(100% - 24px)}.controls{position:absolute;right:14px;bottom:14px;display:flex;align-items:end;gap:12px}.pad{display:grid;grid-template-columns:44px 44px 44px;grid-template-rows:44px 44px;gap:5px}.pad button,.lookpad button{border:1px solid #b99a5b;background:#f6f0e5e8;color:#51483d;border-radius:12px;font-size:18px;touch-action:none;user-select:none}.pad button:nth-child(1){grid-column:2}.pad button:nth-child(2){grid-column:1;grid-row:2}.pad button:nth-child(3){grid-column:2;grid-row:2}.pad button:nth-child(4){grid-column:3;grid-row:2}.lookpad{display:grid;grid-template-columns:42px 42px;grid-template-rows:42px 42px;gap:5px}.panel{margin-top:18px}.panel h2{font-weight:400;color:var(--deep);font-size:23px;margin:0 0 10px}.rooms{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:8px}.room{background:#f4eddf;border:1px solid #c5a96d;border-radius:12px;padding:12px;text-align:left;cursor:pointer;color:var(--ink);font:14px Arial,sans-serif;transition:.2s}.room:hover{background:#e6dfce;transform:translateY(-2px)}.room b{display:block;font-weight:600;margin-bottom:4px}.room span{color:#827363;font-size:12px}.foot{font:12px Arial,sans-serif;color:#796b5b;text-align:center;padding:18px}.welcome{position:absolute;inset:0;z-index:4;background:linear-gradient(110deg,#273328eF,#59634fe0),url('');display:flex;align-items:center;justify-content:center;text-align:center;padding:24px;color:#f5f0e5}.welcome-card{max-width:560px}.welcome .mark{font-size:12px;letter-spacing:.35em;color:#d6c49b}.welcome h1{font-size:clamp(32px,7vw,58px);font-weight:normal;letter-spacing:.12em;margin:12px 0}.welcome p{font:15px/1.6 Arial,sans-serif;color:#e4dfd3}.start{margin-top:18px;border:1px solid #c7ad77;background:#d6c49b;color:#273328;padding:13px 24px;border-radius:28px;font:600 14px Arial,sans-serif;cursor:pointer}.smallnote{font:11px Arial;color:#c9c4b9;margin-top:13px}.hidden{display:none!important}
-@media(max-width:600px){.top{align-items:flex-start}.actions{width:100%}.btn{flex:1;padding:9px 8px}.stage{height:66vh;min-height:370px}main{padding:9px}.hint{font-size:11px}.controls{right:9px;bottom:9px;gap:8px}.pad{grid-template-columns:38px 38px 38px;grid-template-rows:38px 38px}.lookpad{grid-template-columns:36px 36px;grid-template-rows:36px 36px}.welcome h1{letter-spacing:.08em}}
-</style></head><body>
-<header class="top"><div class="brand">ATLAS CORPORAL<small>CLÍNICA DE ESTÉTICA · TOUR VIRTUAL</small></div><nav class="actions"><button class="btn active" id="walk">Caminhar</button><button class="btn" id="aerial">Vista aérea</button><button class="btn" id="catalog">Ambientes</button><button class="btn" id="ceiling">Mostrar teto</button></nav></header>
-<main><section class="stage" id="stage"><div class="hint" id="hint">Use os controles para caminhar · Arraste a tela para olhar ao redor</div><div class="controls"><div class="lookpad" aria-label="Olhar"><button data-look="left">↶</button><button data-look="up">↑</button><button data-look="down">↓</button><button data-look="right">↷</button></div><div class="pad" aria-label="Movimento"><button data-key="w">↑</button><button data-key="a">←</button><button data-key="s">↓</button><button data-key="d">→</button></div></div><div class="welcome" id="welcome"><div class="welcome-card"><div class="mark">BEM-VINDA À</div><h1>ATLAS CORPORAL</h1><p>Uma clínica pensada para acolher, cuidar e valorizar o bem-estar.<br>Explore nossos ambientes em uma visita virtual.</p><button class="start" id="start">ENTRAR NA CLÍNICA</button><div class="smallnote">Experiência 3D demonstrativa · Arraste para olhar · Use os controles para se movimentar</div></div></div></section><section class="panel" id="panel"><h2>Explore os ambientes</h2><div class="rooms" id="rooms"></div></section></main><footer class="foot">Projeto demonstrativo de visita virtual · Atlas Corporal</footer>
+*{box-sizing:border-box}
+body{margin:0;background:#eee8da;color:#40392e;font-family:Arial,sans-serif}
+header{padding:18px 20px;background:#f5efe3;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.brand{font-family:Georgia,serif;font-size:27px;letter-spacing:4px;color:#59664b}
+small{display:block;font-size:10px;letter-spacing:2px;margin-top:5px;color:#837a69}
+button{background:#f7f1e5;border:1px solid #b8aa89;border-radius:30px;padding:11px 16px;color:#4b493b;cursor:pointer}
+button:hover{background:#697454;color:white}
+#stage{height:70vh;min-height:420px;margin:12px;border-radius:20px;overflow:hidden;position:relative;background:#e8e0d0}
+#stage canvas{width:100%;height:100%;display:block}
+#hint{position:absolute;top:15px;left:15px;background:#f7f1e5dd;padding:10px 14px;border-radius:12px;font-size:12px}
+#controls{position:absolute;bottom:15px;right:15px;display:grid;grid-template-columns:repeat(3,48px);gap:5px}
+#controls button{padding:12px 5px;border-radius:12px}
+#rooms{padding:8px 12px 25px;display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:10px}
+.room{padding:15px;border-radius:14px;background:#f8f2e7;border:1px solid #d5c8ac;text-align:left}
+.room b{display:block;margin-bottom:5px}
+.room span{font-size:12px;color:#887d6b}
+</style>
+</head>
+<body>
+
+<header>
+<div class="brand">ATLAS CORPORAL<small>CLÍNICA DE ESTÉTICA · TOUR VIRTUAL</small></div>
+<div>
+<button onclick="walk()">Caminhar</button>
+<button onclick="aerial()">Vista aérea</button>
+<button onclick="showAll()">Mostrar clínica</button>
+</div>
+</header>
+
+<div id="stage">
+<div id="hint">Arraste a tela para olhar ao redor · Use WASD ou as setas para caminhar</div>
+<div id="controls">
+<button onclick="move(0,-1)">↑</button>
+<button onclick="turn(-1)">↶</button>
+<button onclick="move(0,1)">↓</button>
+<button onclick="move(-1,0)">←</button>
+<button onclick="turn(1)">↷</button>
+<button onclick="move(1,0)">→</button>
+</div>
+</div>
+
+<h2 style="padding:0 15px;font-family:Georgia">Explore os ambientes</h2>
+<div id="rooms"></div>
+
 <script type="module">
 import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
-const stage=document.querySelector('#stage'),hint=document.querySelector('#hint');
-const scene=new THREE.Scene();scene.background=new THREE.Color('#e9e1d0');scene.fog=new THREE.Fog('#e9e1d0',28,55);
-const camera=new THREE.PerspectiveCamera(68,stage.clientWidth/stage.clientHeight,.1,100);camera.position.set(0,1.65,5.3);
-const renderer=new THREE.WebGLRenderer({antialias:true});renderer.setPixelRatio(Math.min(devicePixelRatio,1.8));renderer.setSize(stage.clientWidth,stage.clientHeight);renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1;stage.appendChild(renderer.domElement);
-scene.add(new THREE.HemisphereLight('#fff8e9','#8b8877',2.15));const sun=new THREE.DirectionalLight('#fff1d7',2.0);sun.position.set(-7,14,9);sun.castShadow=true;scene.add(sun);
-const mat=(c,r=.86)=>new THREE.MeshStandardMaterial({color:c,roughness:r});const floorMat=mat('#d8cbb3'),wallMat=mat('#eee9df'),olive=mat('#879078'),wood=mat('#9a7655'),white=mat('#f8f5ed'),dark=mat('#51483d'),glass=new THREE.MeshStandardMaterial({color:'#9dc5c8',roughness:.24,metalness:.08});
-function box(x,y,z,w,h,d,m,cast=true){let o=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),m);o.position.set(x,y+h/2,z);o.castShadow=cast;o.receiveShadow=true;scene.add(o);return o}
-// Floors and exterior walls (open entrance at front)
-box(0,-.16,0,18,.25,13,floorMat,false);box(-9,0,0,.18,3.1,13,wallMat);box(9,0,0,.18,3.1,13,wallMat);box(0,0,-6.5,18,3.1,.18,wallMat);box(-5.4,0,6.5,7.2,3.1,.18,wallMat);box(5.1,0,6.5,7.8,3.1,.18,wallMat);
-// Partition layout; approximate geometry from saved floor plan
-const walls=[[-2.2,0,-4.2,.14,3.0,4.6],[-2.2,0,-1.1,.14,3,1.7],[-2.2,0,2.1,.14,3,3.0],[2.5,0,-3.7,.14,3,5.6],[5.8,0,-1.7,.14,3,3.4],[5.8,0,2.0,.14,3,3.2],[-5.6,0,-2.1,6.8,3,.14],[-5.6,0,1.2,6.8,3,.14],[3.9,0,-5.0,6.2,3,.14],[3.9,0,-.1,6.2,3,.14],[3.9,0,3.5,6.2,3,.14],[-5.6,0,4.5,6.8,3,.14]];const wallMeshes=[];for(const a of walls)wallMeshes.push(box(...a,wallMat));
-// Furniture & simple recognizable room details
-function bed(x,z){box(x,.05,z,1.05,.22,2.05,white);box(x,.29,z-.78,1.02,.22,.42,olive);box(x,.18,z+.92,1.0,.18,.25,white);box(x,.04,z-.85,1.05,.12,.15,white)}
-function cabinet(x,z,w=1.5){box(x,.05,z,w,.9,.42,wood);box(x,.98,z-.08,.75,.06,.48,white,false);}
-function plant(x,z){box(x,.02,z,.32,.42,.32,wood);let p=new THREE.Mesh(new THREE.SphereGeometry(.38,10,8),olive);p.position.set(x,.82,z);p.scale.y=1.35;scene.add(p);for(let i=0;i<3;i++){let leaf=new THREE.Mesh(new THREE.SphereGeometry(.16,8,6),mat('#687c61'));leaf.position.set(x+(i-1)*.2,1.15,z+.1*(i-1));leaf.scale.set(.5,1.5,.5);scene.add(leaf)}}
-function desk(x,z){box(x,.08,z,1.9,.85,.75,wood);box(x,.96,z-.08,.75,.06,.48,dark,false);box(x,.94,z-.3,.55,.06,.35,mat('#242824'),false)}
-function seat(x,z){box(x,.08,z,.8,.42,.72,mat('#c9b8a0'));box(x,.52,z+.27,.8,.65,.18,mat('#c9b8a0'))}
-function table(x,z){box(x,.08,z,2.1,.78,.85,wood);for(const cx of [x-.75,x+.75])for(const cz of [z-.6,z+.6])seat(cx,cz)}
-// Three treatment rooms
-bed(-5.4,-3.7);cabinet(-7.7,-5.2);plant(-3.2,-5.2);bed(-5.4,-.4);cabinet(-7.7,.5);plant(-3.2,.2);bed(-5.4,3.2);cabinet(-7.7,4.8);plant(-3.2,4.7);
-// Reception and assessment room
- desk(-6.5,5.55);seat(-4.3,5.3);seat(-3.2,5.3);plant(-8.2,5.4);desk(6.8,4.9);seat(5.4,4.6);plant(8,5.7);
-// Support spaces, storage & pantry
-cabinet(3.6,-5.25,2.0);cabinet(6.9,-5.3,2.0);cabinet(7.2,-2.0,1.6);table(5.2,-4.9);table(5.2,-3.1);
-// bathroom fixtures
-for(const [x,z] of [[7.2,-.4],[7.2,1.7],[7.2,3.8]]){box(x,.05,z,.62,.45,.72,white);box(x+.62,.05,z-.25,.45,.75,.4,white)}
-// Reception branding wall and window accents
-box(-6.2,1.3,-6.36,3.8,1.1,.06,olive,false);for(const [x,z] of [[-8.2,0],[-5.5,0],[-8.2,3],[-5.5,3],[1.1,-6.38],[4.2,-6.38],[7.5,-6.38]])box(x,1.35,z,1.15,1.05,.07,glass,false);
-// Ceiling toggle uses a lightweight ceiling plane
-const ceiling=box(0,3.05,0,18,.12,13,mat('#eee8dc'),false);ceiling.visible=false;
-const roomData=[['Recepção','Balcão e espera',-6.3,5.5],['Sala de avaliação','Consulta e avaliação',6.6,4.7],['Atendimento 1','Sala de procedimentos',-5.4,3.2],['Atendimento 2','Sala de procedimentos',-5.4,-.4],['Atendimento 3','Sala de procedimentos',-5.4,-3.7],['Copa','Área de descanso',5.2,-4.1],['Armazenamento','Materiais e insumos',3.6,-5.2],['DML','Materiais de limpeza',7.2,-2.0],['Banheiro PNE','Acessível',7.2,-.4],['Banheiro feminino','Sanitário',7.2,1.7],['Banheiro masculino','Sanitário',7.2,3.8],['Despensa','Estoque de apoio',1.1,-4.9],['Resíduos','Abrigo de resíduos',-7.5,-5.2],['Banheiro funcionários','Sanitário de apoio',-4.7,-5.2]];
-const roomButtons=document.querySelector('#rooms');roomData.forEach(([name,desc,x,z])=>{let b=document.createElement('button');b.className='room';b.innerHTML=`<b>${name}</b><span>${desc}</span>`;b.onclick=()=>goRoom(x,z);roomButtons.appendChild(b)});
-let mode='walk',yaw=0,pitch=-.05,keys={},drag=false,lastX=0,lastY=0,walkPos=new THREE.Vector3(0,1.65,5.3),touchLook={};
-function look(){camera.rotation.order='YXZ';camera.rotation.y=yaw;camera.rotation.x=pitch}
-function goRoom(x,z){mode='walk';setActive('walk');walkPos.set(x,1.65,z);yaw=0;pitch=-.08;camera.position.copy(walkPos);look();hint.textContent='Destino selecionado. Use as setas de movimento e arraste para olhar ao redor.'}
-function setActive(id){document.querySelectorAll('.btn').forEach(b=>b.classList.remove('active'));document.querySelector('#'+id).classList.add('active')}
-document.querySelector('#start').onclick=()=>{document.querySelector('#welcome').classList.add('hidden');mode='walk';camera.position.copy(walkPos);look();hint.textContent='Caminhar: use os controles na tela ou WASD/setas · Arraste para olhar.'};
-document.querySelector('#walk').onclick=()=>{mode='walk';setActive('walk');camera.position.copy(walkPos);look();hint.textContent='Caminhar: WASD ou setas · Arraste para olhar ao redor.'};
-document.querySelector('#aerial').onclick=()=>{mode='aerial';setActive('aerial');camera.position.set(0,18,16);camera.lookAt(0,0,0);hint.textContent='Vista aérea: arraste para girar a câmera e use a roda/pinça para aproximar.'};
-document.querySelector('#catalog').onclick=()=>document.querySelector('#panel').scrollIntoView({behavior:'smooth'});
-document.querySelector('#ceiling').onclick=()=>{ceiling.visible=!ceiling.visible;document.querySelector('#ceiling').classList.toggle('active',ceiling.visible)};
-renderer.domElement.addEventListener('pointerdown',e=>{drag=true;lastX=e.clientX;lastY=e.clientY;renderer.domElement.setPointerCapture(e.pointerId)});renderer.domElement.addEventListener('pointerup',()=>drag=false);renderer.domElement.addEventListener('pointercancel',()=>drag=false);renderer.domElement.addEventListener('pointermove',e=>{if(!drag)return;let dx=e.clientX-lastX,dy=e.clientY-lastY;lastX=e.clientX;lastY=e.clientY;if(mode==='walk'){yaw-=dx*.0035;pitch=Math.max(-.95,Math.min(.95,pitch-dy*.0025));look()}else{camera.position.applyAxisAngle(new THREE.Vector3(0,1,0),-dx*.004);camera.position.y=Math.max(6,Math.min(25,camera.position.y+dy*.03));camera.lookAt(0,0,0)}});
-renderer.domElement.addEventListener('wheel',e=>{if(mode==='aerial'){camera.position.multiplyScalar(e.deltaY>0?1.06:.94);camera.position.y=Math.max(6,Math.min(25,camera.position.y));camera.lookAt(0,0,0)}});
-window.addEventListener('keydown',e=>keys[e.key.toLowerCase()]=true);window.addEventListener('keyup',e=>keys[e.key.toLowerCase()]=false);document.querySelectorAll('.pad button').forEach(b=>{let k=b.dataset.key;b.addEventListener('pointerdown',e=>{e.preventDefault();keys[k]=true});['pointerup','pointercancel','pointerleave'].forEach(ev=>b.addEventListener(ev,()=>keys[k]=false))});
-document.querySelectorAll('.lookpad button').forEach(b=>{let k=b.dataset.look;b.addEventListener('pointerdown',e=>{e.preventDefault();touchLook[k]=true});['pointerup','pointercancel','pointerleave'].forEach(ev=>b.addEventListener(ev,()=>touchLook[k]=false))});
-function animate(){requestAnimationFrame(animate);if(mode==='walk'){let f=(keys.w||keys.arrowup?1:0)-(keys.s||keys.arrowdown?1:0),s=(keys.d||keys.arrowright?1:0)-(keys.a||keys.arrowleft?1:0);if(f||s){let v=new THREE.Vector3(s,0,-f).normalize().applyAxisAngle(new THREE.Vector3(0,1,0),yaw).multiplyScalar(.045);walkPos.add(v);walkPos.x=THREE.MathUtils.clamp(walkPos.x,-8.2,8.2);walkPos.z=THREE.MathUtils.clamp(walkPos.z,-5.8,5.8)}if(touchLook.left)yaw+=.025;if(touchLook.right)yaw-=.025;if(touchLook.up)pitch=Math.max(-.95,pitch-.02);if(touchLook.down)pitch=Math.min(.95,pitch+.02);camera.position.copy(walkPos);look()}renderer.render(scene,camera)}animate();
-new ResizeObserver(()=>{camera.aspect=stage.clientWidth/stage.clientHeight;camera.updateProjectionMatrix();renderer.setSize(stage.clientWidth,stage.clientHeight)}).observe(stage);
-</script></body></html>
+
+const stage=document.querySelector('#stage');
+const scene=new THREE.Scene();
+scene.background=new THREE.Color('#e9e1d0');
+scene.fog=new THREE.Fog('#e9e1d0',22,40);
+
+const camera=new THREE.PerspectiveCamera(65,stage.clientWidth/stage.clientHeight,.1,100);
+camera.position.set(0,1.65,7);
+
+const renderer=new THREE.WebGLRenderer({antialias:true});
+renderer.setSize(stage.clientWidth,stage.clientHeight);
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+renderer.shadowMap.enabled=true;
+renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+renderer.outputColorSpace=THREE.SRGBColorSpace;
+renderer.toneMapping=THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure=1.2;
+stage.prepend(renderer.domElement);
+
+scene.add(new THREE.HemisphereLight('#fff8e9','#8c846f',2));
+const light=new THREE.DirectionalLight('#fff3dc',3);
+light.position.set(5,10,7);
+light.castShadow=true;
+scene.add(light);
+
+const mat=(c)=>new THREE.MeshStandardMaterial({color:c,roughness:.78});
+const cream=mat('#eee5d4'), olive=mat('#788267'), darkOlive=mat('#58634c');
+const wood=mat('#a98258'), lightWood=mat('#c6a47a');
+const white=mat('#f8f4ec'), gray=mat('#c5c1b9');
+const green=mat('#557451'), black=mat('#443e35');
+
+function box(x,y,z,w,h,d,m,shadow=true){
+ const o=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),m);
+ o.position.set(x,y,z);
+ o.castShadow=shadow;
+ o.receiveShadow=true;
+ scene.add(o);
+ return o;
+}
+function plant(x,z){
+ box(x,.22,z,.38,.44,.38,wood);
+ const leaves= new THREE.Group();
+ for(let i=0;i<7;i++){
+  const leaf=new THREE.Mesh(new THREE.SphereGeometry(.16,.12,8),green);
+  leaf.scale.set(.7,2.3,.7);
+  leaf.position.set(Math.sin(i)*.15,.55+Math.random()*.35,Math.cos(i)*.15);
+  leaves.add(leaf);
+ }
+ leaves.position.set(x,0,z);scene.add(leaves);
+}
+function bed(x,z){
+ box(x,.25,z,1.45,.25,2.05,white);
+ box(x,.4,z,1.3,.18,1.8,white);
+ box(x,.54,z-.72,.65,.22,.4,white);
+ box(x,.16,z,1.6,.16,2.15,wood);
+ box(x,.75,z,1.48,.08,2.05,white);
+}
+function desk(x,z){
+ box(x,.78,z,1.8,.12,.8,wood);
+ for(let dx of [-.7,.7])box(x+dx,.38,z,.08,.72,.08,black);
+}
+function cabinet(x,z){
+ box(x,.65,z,1.5,1.3,.45,lightWood);
+ for(let i=0;i<3;i++)box(x,.25+i*.4,z-.24,1.35,.025,.02,wood);
+}
+function sofa(x,z){
+ box(x,.42,z,2,.45,.8,olive);
+ box(x,.72,z-.35,2,.5,.18,olive);
+ for(let dx of [-.85,.85])box(x+dx,.65,z, .25,.45,.8,olive);
+}
+function walls(){
+ // Floor
+ box(0,-.12,0,18,.22,13,cream);
+ // Outer walls
+ box(-9,1.5,0,.22,3,13,cream);
+ box(9,1.5,0,.22,3,13,cream);
+ box(0,1.5,-6.5,18,3,.22,cream);
+ box(-5.8,1.5,6.5,6.4,3,.22,cream);
+ box(5.8,1.5,6.5,6.4,3,.22,cream);
+ // Interior partitions
+ box(-2.3,1.5,-2.1,.16,3,4.2,cream);
+ box(2.2,1.5,-2.1,.16,3,4.2,cream);
+ box(-5.5,1.5,0,4.8,3,.16,cream);
+ box(5.5,1.5,0,4.8,3,.16,cream);
+ box(0,1.5,-4.5,5.4,3,.16,cream);
+ box(0,1.5,2.6,5.4,3,.16,cream);
+ // Olive accent walls
+ box(-6.1,1.5,-6.35,5.7,3,.06,olive);
+ box(0,1.5,-6.35,5.7,3,.06,olive);
+ // Wall decor
+ box(-6.1,1.95,-6.28,2.1,1.05,.06,wood);
+ box(-6.1,1.95,-6.22,1.9,.85,.04,cream);
+}
+walls();
+
+// Reception
+desk(-6.3,4.8);
+sofa(-6.2,2.1);
+plant(-8,4.5);
+plant(-8,1.5);
+box(-6.3,1.1,-6.22,2,.12,.06,wood);
+
+// Treatment rooms
+bed(-5.2,-3.9); cabinet(-7.3,-5.2); plant(-3.2,-5.2);
+bed(-5.2,-.4); cabinet(-7.3,.8); plant(-3.2,.8);
+bed(5.2,-3.9); cabinet(7.3,-5.2); plant(3.2,-5.2);
+bed(5.2,-.4); cabinet(7.3,.8); plant(3.2,.8);
+
+// Evaluation room
+desk(-1,4.5);
+box(-1,1.1,4.5,1.2,.12,.8,lightWood);
+sofa(1,4.3);
+
+// Decor and details
+plant(8,4.5); plant(8,1.5);
+cabinet(0,-5.3);
+box(0,2.95,0,17.8,.1,12.8,white,false);
+
+// Navigation
+let yaw=0,pitch=0,mode='walk';
+function look(){
+ camera.rotation.order='YXZ';
+ camera.rotation.y=yaw;
+ camera.rotation.x=pitch;
+}
+function walk(){
+ mode='walk';
+ camera.position.set(0,1.65,7);
+ yaw=0;pitch=0;look();
+}
+function aerial(){
+ mode='aerial';
+ camera.position.set(0,17,12);
+ camera.lookAt(0,0,0);
+}
+function showAll(){aerial();}
+function move(x,z){
+ if(mode!=='walk')walk();
+ const dir=new THREE.Vector3(x,0,z).applyAxisAngle(new THREE.Vector3(0,1,0),yaw);
+ camera.position.addScaledVector(dir,.55);
+ camera.position.x=Math.max(-8,Math.min(8,camera.position.x));
+ camera.position.z=Math.max(-5.8,Math.min(5.8,camera.position.z));
+}
+function turn(n){yaw+=n*.18;look();}
+window.move=move;window.turn=turn;
+window.walk=walk;window.aerial=aerial;window.showAll=showAll;
+
+// Keyboard movement
+window.addEventListener('keydown',e=>{
+ if(mode!=='walk')walk();
+ const k=e.key.toLowerCase();
+ if(k==='w'||k==='arrowup')move(0,-1);
+ if(k==='s'||k==='arrowdown')move(0,1);
+ if(k==='a'||k==='arrowleft')turn(-1);
+ if(k==='d'||k==='arrowright')turn(1);
+});
+
+// Drag to look
+let dragging=false,lastX=0,lastY=0;
+renderer.domElement.addEventListener('pointerdown',e=>{
+ dragging=true;lastX=e.clientX;lastY=e.clientY;
+});
+window.addEventListener('pointerup',()=>dragging=false);
+window.addEventListener('pointermove',e=>{
+ if(!dragging||mode!=='walk')return;
+ yaw-=(e.clientX-lastX)*.004;
+ pitch-=(e.clientY-lastY)*.004;
+ pitch=Math.max(-1,Math.min(1,pitch));
+ lastX=e.clientX;lastY=e.clientY;look();
+});
+
+const roomList=[
+ ['Recepção','Balcão, espera e acolhimento',-6.3,4.8],
+ ['Sala de avaliação','Consulta e avaliação',0,4.5],
+ ['Atendimento 1','Sala de procedimentos',-5.2,-3.9],
+ ['Atendimento 2','Sala de procedimentos',-5.2,-.4],
+ ['Atendimento 3','Sala de procedimentos',5.2,-3.9],
+ ['Copa','Área de descanso',0,-5.3],
+ ['Armazenamento','Materiais e insumos',7.3,.8],
+ ['DML','Materiais de limpeza',7.3,-5.2],
+ ['Banheiro PNE','Acessível',7.2,3.8],
+ ['Banheiro feminino','Sanitário',5.2,2],
+ ['Banheiro masculino','Sanitário',-5.2,2],
+ ['Despensa','Estoque de apoio',0,-5.3],
+ ['Resíduos','Abrigo de resíduos',7.3,-5.2],
+ ['Banheiro funcionários','Sanitário de apoio',-7.3,.8]
+];
+
+const rooms=document.querySelector('#rooms');
+roomList.forEach(([name,desc,x,z])=>{
+ const b=document.createElement('button');
+ b.className='room';
+ b.innerHTML=`<b>${name}</b><span>${desc}</span>`;
+ b.onclick=()=>{
+  mode='walk';
+  camera.position.set(x,1.65,z+1.3);
+  yaw=0;pitch=0;look();
+ };
+ rooms.appendChild(b);
+});
+
+function animate(){
+ requestAnimationFrame(animate);
+ renderer.render(scene,camera);
+}
+animate();
+
+window.addEventListener('resize',()=>{
+ camera.aspect=stage.clientWidth/stage.clientHeight;
+ camera.updateProjectionMatrix();
+ renderer.setSize(stage.clientWidth,stage.clientHeight);
+});
+</script>
+</body>
+</html>
